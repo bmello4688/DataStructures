@@ -104,6 +104,35 @@ namespace DataStructures
             }
         }
 
+        public void FindDepthFirstShortestPath(int startVertex)
+        {
+            Stack<int> vertexStack = new Stack<int>();
+
+            this[startVertex].Visited = true;
+            vertexStack.Push(startVertex);
+
+            while (vertexStack.Count > 0)
+            {
+                int vertex = vertexStack.Peek();
+
+                bool foundUnvisitedVertex = false;
+                foreach (var edge in this[vertex].Edges)
+                {
+                    if (!this[edge.EndingVertex.Number].Visited)
+                    {
+                        foundUnvisitedVertex = true;
+                        this[edge.EndingVertex.Number].Visited = foundUnvisitedVertex;
+                        vertexStack.Push(edge.EndingVertex.Number);
+
+                        break;
+                    }
+                }
+
+                if (!foundUnvisitedVertex)
+                    vertexStack.Pop();
+            }
+        }
+
         public IEnumerator<T> GetEnumerator()
         {
             return verticesDictionary.Values.GetEnumerator();
