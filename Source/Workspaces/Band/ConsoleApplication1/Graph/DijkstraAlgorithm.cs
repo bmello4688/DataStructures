@@ -5,11 +5,95 @@ using System.Text;
 
 namespace DataStructures
 {
-    public class DijkstraAlgorithm<T>
+    public class DijkstraAlgorithm<TVertex> where TVertex : Vertex
     {
-        public DijkstraAlgorithm(Graph<T> graph)
-        {
+        private List<Vertex> nodes;
+        private List<Edge> edges;
+        private HashSet<Vertex> settledNodes;
+        private HashSet<Vertex> unSettledNodes;
+        private Dictionary<Vertex, int> shortestDistanceDictionary;
+        private Dictionary<Vertex, Vertex> predecessors;
 
+        public DijkstraAlgorithm(Graph<TVertex> graph)
+        {
+            nodes = new List<Vertex>(graph.GetVertices());
+            edges = new List<Edge>(graph.GetEdges());
+        }
+
+        public void Execute(Vertex startingVertex)
+        {
+            settledNodes = new HashSet<Vertex>();
+            unSettledNodes = new HashSet<Vertex>();
+            shortestDistanceDictionary = new Dictionary<Vertex, int>();
+            predecessors = new Dictionary<Vertex, Vertex>();
+            shortestDistanceDictionary.Add(startingVertex, 0);
+            unSettledNodes.Add(startingVertex);
+            while (unSettledNodes.Count > 0)
+            {
+                Vertex node = GetMinimum(unSettledNodes);
+                settledNodes.Add(node);
+                unSettledNodes.Remove(node);
+                FindMinimalDistances(node);
+            }
+        }
+
+        private void FindMinimalDistances(Vertex vertex)
+        {
+            List<Vertex> adjacentNodes = GetUnsettledNeighbors(vertex);
+            foreach (var target in adjacentNodes)
+            {
+                if (GetShortestDistance(target) > GetShortestDistance(vertex) + GetDistance(vertex, target))
+                {
+                    shortestDistanceDictionary.Add(target, GetShortestDistance(vertex) + GetDistance(vertex, target));
+                    predecessors.Add(target, vertex);
+                    unSettledNodes.Add(target);
+                }
+            }
+        }
+
+        private int GetDistance(Vertex startingVertex, Vertex endingVertex)
+        {
+            Edge foundEdge = edges.Find(edge => edge.StartingVertex == startingVertex && edge.EndingVertex == endingVertex);
+
+            if (foundEdge == null)
+                throw new Exception("Could not find edge");
+            else
+                return foundEdge.Weight;
+        }
+
+        private List<Vertex> GetUnsettledNeighbors(Vertex startingVertex)
+        {
+            return startingVertex.Edges.Where(edge => !IsSettled(edge.EndingVertex)).Select(edge => edge.EndingVertex).ToList();
+        }
+
+        private Vertex GetMinimum(HashSet<Vertex> vertices)
+        {
+            Vertex minimum = null;
+            foreach (var vertex in vertices)
+            {
+                if (minimum == null)
+                    minimum = vertex;
+                else
+                {
+                    if (GetShortestDistance(vertex) < GetShortestDistance(minimum))
+                        minimum = vertex;
+                }
+            }
+
+            return minimum;
+        }
+
+        private bool IsSettled(Vertex vertex)
+        {
+            return settledNodes.Contains(vertex);
+        }
+
+        private int GetShortestDistance(Vertex destination)
+        {
+            if (!shortestDistanceDictionary.ContainsKey(destination))
+                return int.MaxValue;
+            else
+                return shortestDistanceDictionary[destination];
         }
         //Foreach node set distance[node] = HIGH
         //SettledNodes = empty

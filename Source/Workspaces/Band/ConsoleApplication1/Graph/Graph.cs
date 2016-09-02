@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -141,6 +142,16 @@ namespace DataStructures
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        internal IEnumerable<Vertex> GetVertices()
+        {
+            return verticesDictionary.Values.Cast<Vertex>();
+        }
+
+        internal IEnumerable<Edge> GetEdges()
+        {
+            return GetVertices().SelectMany(vertex => vertex.Edges);
         }
     }
 }
