@@ -38,29 +38,6 @@ namespace DataStructures
             this[startVertex].AddEdge(new Vertex(endVertex), weight);
         }
 
-        public int GetShortestPathLength(int vertex)
-        {
-            if(this[vertex].Level < 0)
-                return this[vertex].Level;
-            else
-            {
-                int pathLength = 0;
-                int currentVertex = vertex;
-
-                while (this[currentVertex].Level > 0)
-                {
-                    Edge nextEdge = this[currentVertex].GetNextEdgeInShortestPath();
-
-                    pathLength += nextEdge.Weight;
-
-                    currentVertex = nextEdge.EndingVertex.Number;
-                }
-
-                return pathLength;
-            }
-
-        }
-
         // Removes the first occurence of an edge and returns true
         // if there was any change in the collection, else false
         public void RemoveEdge(int startVertex, int endVertex)
@@ -75,62 +52,6 @@ namespace DataStructures
             foreach (var vertex in this)
             {
                 vertex.ReplaceEdge(oldVertex, newVertex);
-            }
-        }
-
-        public void FindBreadthFirstShortestPath(int startVertex)
-        {
-            //BreadthFirstSearch
-            Queue<int> vertexQueue = new Queue<int>();
-
-            this[startVertex].Level = 0;
-            vertexQueue.Enqueue(startVertex);
-
-            while(vertexQueue.Count > 0)
-            {
-                int vertex = vertexQueue.Dequeue();
-
-                foreach (var edge in this[vertex].Edges)
-                {
-                    if(this[edge.EndingVertex.Number].Level < 0 && edge.EndingVertex.Number != startVertex)
-                    {
-                        this[edge.EndingVertex.Number].Level = this[vertex].Level + 1;
-
-                        if(this[edge.EndingVertex.Number].Parent == null || this[edge.EndingVertex.Number].GetNextEdgeInShortestPath().Weight > edge.Weight)
-                            this[edge.EndingVertex.Number].Parent = this[vertex];
-
-                        vertexQueue.Enqueue(edge.EndingVertex.Number);
-                    }
-                }
-            }
-        }
-
-        public void FindDepthFirstShortestPath(int startVertex)
-        {
-            Stack<int> vertexStack = new Stack<int>();
-
-            this[startVertex].Visited = true;
-            vertexStack.Push(startVertex);
-
-            while (vertexStack.Count > 0)
-            {
-                int vertex = vertexStack.Peek();
-
-                bool foundUnvisitedVertex = false;
-                foreach (var edge in this[vertex].Edges)
-                {
-                    if (!this[edge.EndingVertex.Number].Visited)
-                    {
-                        foundUnvisitedVertex = true;
-                        this[edge.EndingVertex.Number].Visited = foundUnvisitedVertex;
-                        vertexStack.Push(edge.EndingVertex.Number);
-
-                        break;
-                    }
-                }
-
-                if (!foundUnvisitedVertex)
-                    vertexStack.Pop();
             }
         }
 

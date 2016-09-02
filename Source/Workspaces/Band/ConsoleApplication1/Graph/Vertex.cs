@@ -13,7 +13,6 @@ namespace DataStructures
         public int Weight { get; set; }
 
         public Vertex Parent { get; set; }
-        public int Level { get; set; }
         public bool Visited { get; set; }
 
         public IEnumerable<Edge> Edges { get { return edges.Values; } }
@@ -22,7 +21,6 @@ namespace DataStructures
         {
             Number = number;
             Weight = 1;
-            Level = -1;
         }
 
         public void AddEdge(Vertex endVertex, int weight)
