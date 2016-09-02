@@ -38,9 +38,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DijkstraAlgorithm.cs" />
+    <Compile Include="DijkstraSearchAlgorithm.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="Graph.cs" />
+    <Compile Include="GraphSearchAlgorithm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Vertex.cs" />
   </ItemGroup>
