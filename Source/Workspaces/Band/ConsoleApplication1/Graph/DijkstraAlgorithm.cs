@@ -37,6 +37,28 @@ namespace DataStructures
             }
         }
 
+        public List<Vertex> GetShortestPath(Vertex target)
+        {
+            List<Vertex> path = new List<Vertex>();
+            Vertex step = target;
+            // check if a path exists
+            if (!predecessors.ContainsKey(step))
+                return null;
+
+            path.Add(step);
+
+            while (!predecessors.ContainsKey(step))
+            {
+                step = predecessors[step];
+                path.Add(step);
+            }
+
+            // Reverse because current list is from end to start
+            path.Reverse();
+
+            return path;
+        }
+
         private void FindMinimalDistances(Vertex vertex)
         {
             List<Vertex> adjacentNodes = GetUnsettledNeighbors(vertex);
