@@ -5,18 +5,16 @@ using System.Text;
 
 namespace DataStructures
 {
-    public class DijkstraAlgorithm<TVertex> where TVertex : Vertex
+    public class DijkstraAlgorithm
     {
-        private List<Vertex> nodes;
         private List<Edge> edges;
         private HashSet<Vertex> settledNodes;
         private HashSet<Vertex> unSettledNodes;
         private Dictionary<Vertex, int> shortestDistanceDictionary;
         private Dictionary<Vertex, Vertex> predecessors;
 
-        public DijkstraAlgorithm(Graph<TVertex> graph)
+        public DijkstraAlgorithm(Graph<Vertex> graph)
         {
-            nodes = new List<Vertex>(graph.GetVertices());
             edges = new List<Edge>(graph.GetEdges());
         }
 
