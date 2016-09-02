@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DataStructures
 {
-    public abstract class GraphSearchAlgorithm
+    class DepthFirstSearch
     {
     }
 }

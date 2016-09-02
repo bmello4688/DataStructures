@@ -38,10 +38,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DijkstraSearchAlgorithm.cs" />
+    <Compile Include="BreadthFirstSearch.cs" />
+    <Compile Include="DepthFirstSearch.cs" />
+    <Compile Include="DijkstraSearch.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="Graph.cs" />
-    <Compile Include="GraphSearchAlgorithm.cs" />
+    <Compile Include="GraphSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Vertex.cs" />
   </ItemGroup>
