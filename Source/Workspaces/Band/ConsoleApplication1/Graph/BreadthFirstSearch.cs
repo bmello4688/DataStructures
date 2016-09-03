@@ -17,28 +17,30 @@ namespace DataStructures
                 levelDicitonary.Add(vertex, -1);
             }
         }
-        public void FindBreadthFirstShortestPath(int startVertex)
+        public override void ExecuteSearch(Vertex startVertex)
         {
             //BreadthFirstSearch
-            Queue<int> vertexQueue = new Queue<int>();
+            Queue<Vertex> vertexQueue = new Queue<Vertex>();
 
-            levelDicitonary[Graph[startVertex]] = 0;
+            levelDicitonary[startVertex] = 0;
             vertexQueue.Enqueue(startVertex);
 
             while (vertexQueue.Count > 0)
             {
-                int vertex = vertexQueue.Dequeue();
+                Vertex vertex = vertexQueue.Dequeue();
 
-                foreach (var edge in Graph[vertex].Edges)
+                foreach (var edge in vertex.Edges)
                 {
-                    if (levelDicitonary[edge.EndingVertex] < 0 && edge.EndingVertex.Number != startVertex)
+                    if (levelDicitonary[edge.EndingVertex] < 0 && edge.EndingVertex != startVertex)
                     {
-                        levelDicitonary[edge.EndingVertex] = levelDicitonary[Graph[vertex]] + 1;
+                        levelDicitonary[edge.EndingVertex] = levelDicitonary[vertex] + 1;
 
-                        if (Graph[edge.EndingVertex.Number].Parent == null || Graph[edge.EndingVertex.Number].GetNextEdgeInShortestPath().Weight > edge.Weight)
-                            Graph[edge.EndingVertex.Number].Parent = Graph[vertex];
+                        if (!PathPredecessors.ContainsKey(edge.EndingVertex))
+                            PathPredecessors.Add(edge.EndingVertex, vertex);
+                        else if (PathPredecessors[edge.EndingVertex].Weight > edge.Weight)
+                            PathPredecessors[edge.EndingVertex] = vertex;
 
-                        vertexQueue.Enqueue(edge.EndingVertex.Number);
+                        vertexQueue.Enqueue(edge.EndingVertex);
                     }
                 }
             }
@@ -55,7 +57,7 @@ namespace DataStructures
 
                 while (levelDicitonary[Graph[currentVertex]] > 0)
                 {
-                    Edge nextEdge = Graph[currentVertex].GetNextEdgeInShortestPath();
+                    Edge nextEdge = Graph[currentVertex].GetEdge(PathPredecessors[Graph[currentVertex]]);
 
                     pathLength += nextEdge.Weight;
 

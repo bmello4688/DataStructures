@@ -12,9 +12,6 @@ namespace DataStructures
         public int Number { get; private set; }
         public int Weight { get; set; }
 
-        public Vertex Parent { get; set; }
-        public bool Visited { get; set; }
-
         public IEnumerable<Edge> Edges { get { return edges.Values; } }
 
         public Vertex(int number)
@@ -44,9 +41,9 @@ namespace DataStructures
                 edges[oldVertex].EndingVertex.Number = newVertex;
         }
 
-        internal Edge GetNextEdgeInShortestPath()
+        internal Edge GetEdge(Vertex vertex)
         {
-            return edges[Parent.Number];
+            return edges[vertex.Number];
         }
     }
 }

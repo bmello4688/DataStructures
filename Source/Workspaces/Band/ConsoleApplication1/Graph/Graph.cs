@@ -69,10 +69,5 @@ namespace DataStructures
         {
             return verticesDictionary.Values.Cast<Vertex>();
         }
-
-        internal IEnumerable<Edge> GetEdges()
-        {
-            return GetVertices().SelectMany(vertex => vertex.Edges);
-        }
     }
 }

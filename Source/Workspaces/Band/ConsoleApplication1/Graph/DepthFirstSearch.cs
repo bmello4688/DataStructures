@@ -7,31 +7,37 @@ namespace DataStructures
 {
     public class DepthFirstSearch : GraphSearch
     {
+        Dictionary<Vertex, bool> visitedDictionary = new Dictionary<Vertex, bool>();
+
         public DepthFirstSearch(Graph<Vertex> graph)
             :base(graph)
         {
+            foreach (var vertex in graph.GetVertices())
+            {
+                visitedDictionary.Add(vertex, false);
+            }
         }
 
-        public void FindDepthFirstShortestPath(int startVertex)
+        public override void ExecuteSearch(Vertex startVertex)
         {
-            Stack<int> vertexStack = new Stack<int>();
+            Stack<Vertex> vertexStack = new Stack<Vertex>();
 
-            Graph[startVertex].Visited = true;
+            visitedDictionary[startVertex] = true;
             vertexStack.Push(startVertex);
 
             while (vertexStack.Count > 0)
             {
-                int vertex = vertexStack.Peek();
+                Vertex vertex = vertexStack.Peek();
 
                 bool foundUnvisitedVertex = false;
-                foreach (var edge in Graph[vertex].Edges)
+                foreach (var edge in vertex.Edges)
                 {
-                    if (!Graph[edge.EndingVertex.Number].Visited)
+                    if (!visitedDictionary[edge.EndingVertex])
                     {
                         foundUnvisitedVertex = true;
-                        Graph[edge.EndingVertex.Number].Visited = foundUnvisitedVertex;
-                        vertexStack.Push(edge.EndingVertex.Number);
-
+                        visitedDictionary[edge.EndingVertex] = foundUnvisitedVertex;
+                        PathPredecessors.Add(edge.EndingVertex, vertex);
+                        vertexStack.Push(edge.EndingVertex);
                         break;
                     }
                 }
