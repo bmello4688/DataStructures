@@ -68,7 +68,11 @@ namespace ConsoleApplication1
 
         internal void GetAllFish()
         {
-            
+            DijkstraSearch<ShoppingCenter> search = new DijkstraSearch<ShoppingCenter>(this);
+
+            search.ExecuteSearch(1);
+
+            List<ShoppingCenter> shortestPath = search.GetShortestPath(1, GetVertices().Count() - 1);
         }
 
         internal void SetKindsOfFish(int k)

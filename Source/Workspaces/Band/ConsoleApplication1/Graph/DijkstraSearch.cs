@@ -5,23 +5,22 @@ using System.Text;
 
 namespace DataStructures
 {
-    public class DijkstraAlgorithm : GraphSearch
+    public class DijkstraSearch<TVertex> : GraphSearch<TVertex> where TVertex : Vertex
     {
         private HashSet<Vertex> settledNodes;
         private HashSet<Vertex> unSettledNodes;
         private Dictionary<Vertex, int> shortestDistanceDictionary;
 
-        public DijkstraAlgorithm(Graph<Vertex> graph)
+        public DijkstraSearch(Graph<TVertex> graph)
             :base(graph)
         {
         }
 
-        public  override void ExecuteSearch(Vertex startingVertex)
+        public  override void ExecuteSearch(TVertex startingVertex)
         {
             settledNodes = new HashSet<Vertex>();
             unSettledNodes = new HashSet<Vertex>();
             shortestDistanceDictionary = new Dictionary<Vertex, int>();
-            PathPredecessors = new Dictionary<Vertex, Vertex>();
             shortestDistanceDictionary.Add(startingVertex, 0);
             unSettledNodes.Add(startingVertex);
             while (unSettledNodes.Count > 0)
@@ -41,7 +40,7 @@ namespace DataStructures
                 if (GetShortestDistance(target) > GetShortestDistance(vertex) + GetDistance(vertex, target))
                 {
                     shortestDistanceDictionary.Add(target, GetShortestDistance(vertex) + GetDistance(vertex, target));
-                    PathPredecessors.Add(target, vertex);
+                    PathPredecessors.Add(target, (TVertex)vertex);
                     unSettledNodes.Add(target);
                 }
             }

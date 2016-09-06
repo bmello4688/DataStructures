@@ -5,14 +5,15 @@ using System.Text;
 
 namespace DataStructures
 {
-    public abstract class GraphSearch
+    public abstract class GraphSearch<TVertex> where TVertex : Vertex
     {
-        protected Dictionary<Vertex, Vertex> PathPredecessors;
-        protected Graph<Vertex> Graph { get; private set; }
+        protected Dictionary<Vertex, TVertex> PathPredecessors;
+        protected Graph<TVertex> Graph { get; private set; }
 
-        public GraphSearch(Graph<Vertex> graph)
+        public GraphSearch(Graph<TVertex> graph)
         {
             this.Graph = graph;
+            PathPredecessors = new Dictionary<Vertex, TVertex>(graph.GetVertices().Count());
         }
 
 
@@ -21,22 +22,22 @@ namespace DataStructures
             ExecuteSearch(Graph[startingVertexNumber]);
         }
 
-        public abstract void ExecuteSearch(Vertex startingVertex);
+        public abstract void ExecuteSearch(TVertex startingVertex);
 
-        public List<Vertex> GetShortestPath(int startVertex = 0, int targetVertex)
+        public List<TVertex> GetShortestPath(int startVertex, int targetVertex)
         {
             return GetShortestPath(Graph[startVertex], Graph[targetVertex]);
         }
 
-        public List<Vertex> GetShortestPath(Vertex targetVertex)
+        public List<TVertex> GetShortestPath(TVertex targetVertex)
         {
             return GetShortestPath(Graph[0], targetVertex);
         }
 
-        public List<Vertex> GetShortestPath(Vertex startVertex, Vertex targetVertex)
+        public List<TVertex> GetShortestPath(TVertex startVertex, TVertex targetVertex)
         {
-            List<Vertex> path = new List<Vertex>();
-            Vertex step = targetVertex;
+            List<TVertex> path = new List<TVertex>();
+            TVertex step = targetVertex;
             // check if a path exists
             if (!PathPredecessors.ContainsKey(step))
                 return null;
@@ -63,9 +64,9 @@ namespace DataStructures
             return GetShortestPathCost(Graph[target]);
         }
 
-        public int GetShortestPathCost(Vertex target)
+        public int GetShortestPathCost(TVertex target)
         {
-            List<Vertex> shortestPath = GetShortestPath(target);
+            List<TVertex> shortestPath = GetShortestPath(target);
 
             int cost = 0;
             shortestPath.ForEach(vertex => cost += vertex.Weight);

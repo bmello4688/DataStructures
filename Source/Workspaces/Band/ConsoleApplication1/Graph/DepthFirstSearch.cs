@@ -5,11 +5,11 @@ using System.Text;
 
 namespace DataStructures
 {
-    public class DepthFirstSearch : GraphSearch
+    public class DepthFirstSearch<TVertex> : GraphSearch<TVertex> where TVertex : Vertex
     {
         Dictionary<Vertex, bool> visitedDictionary = new Dictionary<Vertex, bool>();
 
-        public DepthFirstSearch(Graph<Vertex> graph)
+        public DepthFirstSearch(Graph<TVertex> graph)
             :base(graph)
         {
             foreach (var vertex in graph.GetVertices())
@@ -18,16 +18,16 @@ namespace DataStructures
             }
         }
 
-        public override void ExecuteSearch(Vertex startVertex)
+        public override void ExecuteSearch(TVertex startVertex)
         {
-            Stack<Vertex> vertexStack = new Stack<Vertex>();
+            Stack<TVertex> vertexStack = new Stack<TVertex>();
 
             visitedDictionary[startVertex] = true;
             vertexStack.Push(startVertex);
 
             while (vertexStack.Count > 0)
             {
-                Vertex vertex = vertexStack.Peek();
+                TVertex vertex = vertexStack.Peek();
 
                 bool foundUnvisitedVertex = false;
                 foreach (var edge in vertex.Edges)
@@ -37,7 +37,7 @@ namespace DataStructures
                         foundUnvisitedVertex = true;
                         visitedDictionary[edge.EndingVertex] = foundUnvisitedVertex;
                         PathPredecessors.Add(edge.EndingVertex, vertex);
-                        vertexStack.Push(edge.EndingVertex);
+                        vertexStack.Push((TVertex)edge.EndingVertex);
                         break;
                     }
                 }

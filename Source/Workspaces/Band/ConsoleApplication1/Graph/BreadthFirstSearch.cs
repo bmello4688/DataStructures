@@ -5,11 +5,11 @@ using System.Text;
 
 namespace DataStructures
 {
-    public class BreadthFirstSearch : GraphSearch
+    public class BreadthFirstSearch<TVertex> : GraphSearch<TVertex> where TVertex : Vertex
     {
         private Dictionary<Vertex, int> levelDicitonary = new Dictionary<Vertex, int>();
 
-        public BreadthFirstSearch(Graph<Vertex> graph)
+        public BreadthFirstSearch(Graph<TVertex> graph)
             :base(graph)
         {
             foreach (var vertex in graph.GetVertices())
@@ -17,7 +17,7 @@ namespace DataStructures
                 levelDicitonary.Add(vertex, -1);
             }
         }
-        public override void ExecuteSearch(Vertex startVertex)
+        public override void ExecuteSearch(TVertex startVertex)
         {
             //BreadthFirstSearch
             Queue<Vertex> vertexQueue = new Queue<Vertex>();
@@ -36,9 +36,9 @@ namespace DataStructures
                         levelDicitonary[edge.EndingVertex] = levelDicitonary[vertex] + 1;
 
                         if (!PathPredecessors.ContainsKey(edge.EndingVertex))
-                            PathPredecessors.Add(edge.EndingVertex, vertex);
+                            PathPredecessors.Add(edge.EndingVertex, (TVertex)vertex);
                         else if (PathPredecessors[edge.EndingVertex].Weight > edge.Weight)
-                            PathPredecessors[edge.EndingVertex] = vertex;
+                            PathPredecessors[edge.EndingVertex] = (TVertex)vertex;
 
                         vertexQueue.Enqueue(edge.EndingVertex);
                     }
