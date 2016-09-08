@@ -44,7 +44,7 @@ namespace DataStructures
 
             path.Add(step);
 
-            while (!PathPredecessors.ContainsKey(step))
+            while (PathPredecessors.ContainsKey(step))
             {
                 step = PathPredecessors[step];
                 path.Add(step);

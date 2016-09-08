@@ -35,7 +35,7 @@ namespace DataStructures
 
         public void AddEdge(int startVertex, int endVertex, int weight = 1)
         {
-            this[startVertex].AddEdge(new Vertex(endVertex), weight);
+            this[startVertex].AddEdge(this[endVertex], weight);
         }
 
         // Removes the first occurence of an edge and returns true
