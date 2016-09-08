@@ -21,6 +21,7 @@ namespace ConsoleApplication1
             int k = line1values[2];
 
             ShoppingCenters shoppingCenters = new ShoppingCenters(n + 1);
+            shoppingCenters.SetKindsOfFish(k);
 
             for (int i = 1; i <= n; i++)
             {
@@ -28,24 +29,23 @@ namespace ConsoleApplication1
 
                 int numberOfTypesOfFish = linei[0];
 
-                for (int j = 0; j < numberOfTypesOfFish; j++)
+                for (int j = 1; j <= numberOfTypesOfFish; j++)
                 {
-                    shoppingCenters[1].FishTypes.Add(linei[j]);
+                    shoppingCenters[i].FishTypes.Add(linei[j]);
                 }
             }
 
             for (int i = 1; i <= m; i++)
             {
-                int[] linei = Array.ConvertAll(Console.ReadLine().Split(' '), Int32.Parse);
+                int[] linej = Array.ConvertAll(Console.ReadLine().Split(' '), Int32.Parse);
 
-                int x = linei[0];
-                int y = linei[1];
-                int travelTime = linei[2];
+                int x = linej[0];
+                int y = linej[1];
+                int travelTime = linej[2];
 
                 shoppingCenters.AddEdge(x, y, travelTime);
             }
 
-            shoppingCenters.SetKindsOfFish(k);
             shoppingCenters.GetAllFish();
 
             Console.WriteLine(shoppingCenters.Level);
