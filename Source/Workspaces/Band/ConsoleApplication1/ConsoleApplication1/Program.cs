@@ -46,9 +46,7 @@ namespace ConsoleApplication1
                 shoppingCenters.AddEdge(x, y, travelTime);
             }
 
-            shoppingCenters.GetAllFish();
-
-            Console.WriteLine(shoppingCenters.Level);
+            Console.WriteLine(shoppingCenters.GetAllFish());
 
             Console.ReadKey();
         }
@@ -58,21 +56,33 @@ namespace ConsoleApplication1
     {
         private int numberOfKindsOfFish;
 
-        public bool Level { get; private set; }
-
         public ShoppingCenters(int centers)
             : base(centers)
         {
 
         }
 
-        internal void GetAllFish()
+        internal int GetAllFish()
         {
             DijkstraSearch<ShoppingCenter> search = new DijkstraSearch<ShoppingCenter>(this);
 
             search.ExecuteSearch(1);
 
-            List<ShoppingCenter> shortestPath = search.GetShortestPath(1, GetVertices().Count() - 1);
+            int lastNode = GetVertices().Count() - 1;
+
+
+            int bestTime = int.MaxValue;
+
+            for (int i = 0; i < (1 << numberOfKindsOfFish); i++)
+            {
+                for (int j = i; j < (1 << numberOfKindsOfFish); j++)
+                {
+                    if ((i | j) == (1 << numberOfKindsOfFish) - 1)
+                        bestTime = Math.Min(bestTime, Math.Max(search.GetShortestPath(i, lastNode).Sum(shop => shop.Weight), search.GetShortestPath(j, lastNode).Sum(shop => shop.Weight)));
+                }
+            }
+
+            return bestTime;
         }
 
         internal void SetKindsOfFish(int k)
