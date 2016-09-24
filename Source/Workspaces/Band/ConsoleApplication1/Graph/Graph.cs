@@ -65,9 +65,9 @@ namespace DataStructures
             return GetEnumerator();
         }
 
-        public IEnumerable<Vertex> GetVertices()
+        public IEnumerable<T> GetVertices()
         {
-            return verticesDictionary.Values.Cast<Vertex>();
+            return verticesDictionary.Values;
         }
     }
 }
