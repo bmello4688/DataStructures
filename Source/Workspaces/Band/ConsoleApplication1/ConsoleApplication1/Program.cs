@@ -44,6 +44,7 @@ namespace ConsoleApplication1
                 int travelTime = linej[2];
 
                 shoppingCenters.AddEdge(x, y, travelTime);
+                shoppingCenters.AddEdge(y, x, travelTime);
             }
 
             Console.WriteLine(shoppingCenters.GetAllFish());
@@ -79,7 +80,7 @@ namespace ConsoleApplication1
 
             List<ShoppingCenter> shortestPath = search.GetShortestPath(1, targetNode);
 
-            int maximumPathCost = shortestPath.Sum(center => center.Weight);
+            int maximumPathCost = GetDistance(shortestPath);
 
             List<int> fishBought = shortestPath.SelectMany(center => center.FishTypes).Distinct().ToList();
 
@@ -88,28 +89,27 @@ namespace ConsoleApplication1
                 fishList.Remove(fish);
             }
 
-            //find nodes that have fish remaining
-            List<ShoppingCenter> remainingShoppingCenters = GetVertices().Where(center => center.FishTypes.Any(value => fishList.Contains(value))).ToList();
-
-            foreach (var center in remainingShoppingCenters)
+            while(search.GetShortestPath(1,targetNode) != null && fishList.Count > 0)
             {
-                List<ShoppingCenter> secondPath = new List<ShoppingCenter>(targetNode);
-                var firstPart = search.GetShortestPath(1, center.Number);
-                var secondPart = search.GetShortestPath(center.Number, targetNode);
-                
-                if (firstPart == null || secondPart == null)
+                search.Clear();
+                search.IgnorePath(shortestPath);
+                search.ExecuteSearch(1);
+
+                var newShortestPath = search.GetShortestPath(1, targetNode);
+
+                if (newShortestPath == null)
                     continue;
 
-                secondPath.AddRange(firstPart);
-                secondPath.AddRange(secondPart);
-
                 //check if path 
-                List<int> potentialFishBought = secondPath.SelectMany(shoppingCenter => shoppingCenter.FishTypes).Distinct().ToList();
+                List<int> potentialFishBought = newShortestPath.SelectMany(shoppingCenter => shoppingCenter.FishTypes).Distinct().ToList();
 
                 bool boughtAllFish = potentialFishBought.Intersect(fishList).Count() == fishList.Count;
 
                 if (boughtAllFish)
-                    maximumPathCost = Math.Max(maximumPathCost, secondPath.Sum(c => c.Weight));
+                    maximumPathCost = Math.Max(maximumPathCost, GetDistance(newShortestPath));
+
+                shortestPath.AddRange(newShortestPath);
+                shortestPath = shortestPath.Distinct().ToList();
             }
 
             return maximumPathCost;

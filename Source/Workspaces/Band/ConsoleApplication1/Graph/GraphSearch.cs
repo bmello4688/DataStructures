@@ -14,6 +14,7 @@ namespace DataStructures
         {
             this.Graph = graph;
             PathPredecessors = new Dictionary<Vertex, TVertex>(graph.GetVertices().Count());
+            Clear();
         }
 
 
@@ -23,6 +24,20 @@ namespace DataStructures
         }
 
         public abstract void ExecuteSearch(TVertex startingVertex);
+
+        public void Clear()
+        {
+            PathPredecessors.Clear();
+
+            foreach (var vertex in Graph.GetVertices())
+            {
+                PathPredecessors.Add(vertex, null);
+            }
+
+            OnClear();
+        }
+
+        protected internal abstract void OnClear();
 
         public List<TVertex> GetShortestPath(int startVertex, int targetVertex)
         {
@@ -34,17 +49,29 @@ namespace DataStructures
             return GetShortestPath(Graph[0], targetVertex);
         }
 
+        public void IgnorePath(List<TVertex> vertices)
+        {
+            int lastNodeNumber = Graph.GetVertices().Count() - 1;
+            foreach (var vertex in vertices)
+            {
+                if (vertex.Number != lastNodeNumber)
+                    IgnoreVertex(vertex);
+            }
+        }
+
+        protected internal abstract void IgnoreVertex(TVertex vertex);
+
         public List<TVertex> GetShortestPath(TVertex startVertex, TVertex targetVertex)
         {
             List<TVertex> path = new List<TVertex>();
             TVertex step = targetVertex;
             // check if a path exists
-            if (!PathPredecessors.ContainsKey(step))
+            if (PathPredecessors[step] == null)
                 return null;
 
             path.Add(step);
 
-            while (PathPredecessors.ContainsKey(step))
+            while (PathPredecessors[step] != null)
             {
                 step = PathPredecessors[step];
                 path.Add(step);
@@ -72,16 +99,6 @@ namespace DataStructures
             shortestPath.ForEach(vertex => cost += vertex.Weight);
 
             return cost;
-        }
-
-        protected int GetDistance(Vertex startingVertex, Vertex endingVertex)
-        {
-            return startingVertex.GetEdge(endingVertex).Weight;
-        }
-
-        protected int GetDistance(int startingVertex, int endingVertex)
-        {
-            return Graph[startingVertex].GetEdge(Graph[endingVertex]).Weight;
         }
     }
 }

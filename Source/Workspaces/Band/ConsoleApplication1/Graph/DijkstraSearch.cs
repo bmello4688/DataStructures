@@ -7,21 +7,35 @@ namespace DataStructures
 {
     public class DijkstraSearch<TVertex> : GraphSearch<TVertex> where TVertex : Vertex
     {
-        private HashSet<Vertex> settledNodes;
-        private HashSet<Vertex> unSettledNodes;
-        private Dictionary<Vertex, int> shortestDistanceDictionary;
+        private HashSet<Vertex> settledNodes = new HashSet<Vertex>();
+        private HashSet<Vertex> unSettledNodes = new HashSet<Vertex>();
+        private Dictionary<Vertex, int> shortestDistanceDictionary = new Dictionary<Vertex, int>();
 
         public DijkstraSearch(Graph<TVertex> graph)
             :base(graph)
         {
         }
 
+        protected internal override void OnClear()
+        {
+            settledNodes.Clear();
+            unSettledNodes.Clear();
+            shortestDistanceDictionary.Clear();
+
+            foreach (var vertex in Graph.GetVertices())
+            {
+                shortestDistanceDictionary.Add(vertex, int.MaxValue);
+            }
+        }
+
+        protected internal override void IgnoreVertex(TVertex vertex)
+        {
+            settledNodes.Add(vertex);
+        }
+
         public  override void ExecuteSearch(TVertex startingVertex)
         {
-            settledNodes = new HashSet<Vertex>();
-            unSettledNodes = new HashSet<Vertex>();
-            shortestDistanceDictionary = new Dictionary<Vertex, int>();
-            shortestDistanceDictionary.Add(startingVertex, 0);
+            shortestDistanceDictionary[startingVertex] = 0;
             unSettledNodes.Add(startingVertex);
             while (unSettledNodes.Count > 0)
             {
@@ -37,10 +51,10 @@ namespace DataStructures
             List<Vertex> adjacentNodes = GetUnsettledNeighbors(vertex);
             foreach (var target in adjacentNodes)
             {
-                if (GetShortestDistance(target) > GetShortestDistance(vertex) + GetDistance(vertex, target))
+                if (GetShortestDistance(target) > GetShortestDistance(vertex) + Graph.GetDistance(vertex, target))
                 {
-                    shortestDistanceDictionary.Add(target, GetShortestDistance(vertex) + GetDistance(vertex, target));
-                    PathPredecessors.Add(target, (TVertex)vertex);
+                    shortestDistanceDictionary[target] = GetShortestDistance(vertex) + Graph.GetDistance(vertex, target);
+                    PathPredecessors[target] = (TVertex)vertex;
                     unSettledNodes.Add(target);
                 }
             }
@@ -75,10 +89,7 @@ namespace DataStructures
 
         private int GetShortestDistance(Vertex destination)
         {
-            if (!shortestDistanceDictionary.ContainsKey(destination))
-                return int.MaxValue;
-            else
-                return shortestDistanceDictionary[destination];
+            return shortestDistanceDictionary[destination];
         }
     }
 }

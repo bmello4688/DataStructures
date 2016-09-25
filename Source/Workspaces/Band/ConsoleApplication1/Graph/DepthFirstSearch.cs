@@ -12,10 +12,6 @@ namespace DataStructures
         public DepthFirstSearch(Graph<TVertex> graph)
             :base(graph)
         {
-            foreach (var vertex in graph.GetVertices())
-            {
-                visitedDictionary.Add(vertex, false);
-            }
         }
 
         public override void ExecuteSearch(TVertex startVertex)
@@ -36,7 +32,7 @@ namespace DataStructures
                     {
                         foundUnvisitedVertex = true;
                         visitedDictionary[edge.EndingVertex] = foundUnvisitedVertex;
-                        PathPredecessors.Add(edge.EndingVertex, vertex);
+                        PathPredecessors[edge.EndingVertex] = vertex;
                         vertexStack.Push((TVertex)edge.EndingVertex);
                         break;
                     }
@@ -44,6 +40,22 @@ namespace DataStructures
 
                 if (!foundUnvisitedVertex)
                     vertexStack.Pop();
+            }
+        }
+
+        protected internal override void IgnoreVertex(TVertex vertex)
+        {
+            visitedDictionary[vertex] = true;
+        }
+
+        protected internal override void OnClear()
+        {
+            foreach (var vertex in Graph.GetVertices())
+            {
+                if (!visitedDictionary.ContainsKey(vertex))
+                    visitedDictionary.Add(vertex, false);
+                else
+                    visitedDictionary[vertex] = false;
             }
         }
     }

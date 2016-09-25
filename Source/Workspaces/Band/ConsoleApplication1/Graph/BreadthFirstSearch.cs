@@ -12,11 +12,19 @@ namespace DataStructures
         public BreadthFirstSearch(Graph<TVertex> graph)
             :base(graph)
         {
-            foreach (var vertex in graph.GetVertices())
+        }
+
+        protected internal override void OnClear()
+        {
+            foreach (var vertex in Graph.GetVertices())
             {
-                levelDicitonary.Add(vertex, -1);
+                if (!levelDicitonary.ContainsKey(vertex))
+                    levelDicitonary.Add(vertex, -1);
+                else
+                    levelDicitonary[vertex] = -1;
             }
         }
+
         public override void ExecuteSearch(TVertex startVertex)
         {
             //BreadthFirstSearch
@@ -35,9 +43,7 @@ namespace DataStructures
                     {
                         levelDicitonary[edge.EndingVertex] = levelDicitonary[vertex] + 1;
 
-                        if (!PathPredecessors.ContainsKey(edge.EndingVertex))
-                            PathPredecessors.Add(edge.EndingVertex, (TVertex)vertex);
-                        else if (PathPredecessors[edge.EndingVertex].Weight > edge.Weight)
+                        if (PathPredecessors[edge.EndingVertex] == null || PathPredecessors[edge.EndingVertex].Weight > edge.Weight)
                             PathPredecessors[edge.EndingVertex] = (TVertex)vertex;
 
                         vertexQueue.Enqueue(edge.EndingVertex);
@@ -67,6 +73,11 @@ namespace DataStructures
                 return pathLength;
             }
 
+        }
+
+        protected internal override void IgnoreVertex(TVertex vertex)
+        {
+            levelDicitonary[vertex] = int.MaxValue;
         }
     }
 }
