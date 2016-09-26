@@ -43,8 +43,7 @@ namespace ConsoleApplication1
                 int y = linej[1];
                 int travelTime = linej[2];
 
-                shoppingCenters.AddEdge(x, y, travelTime);
-                shoppingCenters.AddEdge(y, x, travelTime);
+                shoppingCenters.AddUndirectedEdge(x, y, travelTime);
             }
 
             Console.WriteLine(shoppingCenters.GetAllFish());

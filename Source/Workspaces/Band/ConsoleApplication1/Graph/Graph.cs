@@ -33,9 +33,15 @@ namespace DataStructures
             return (T)Activator.CreateInstance(typeof(T), i);
         }
 
-        public void AddEdge(int startVertex, int endVertex, int weight = 1)
+        public void AddDirectedEdge(int startVertex, int endVertex, int weight = 1)
         {
             this[startVertex].AddEdge(this[endVertex], weight);
+        }
+
+        public void AddUndirectedEdge(int startVertex, int endVertex, int weight = 1)
+        {
+            AddDirectedEdge(startVertex, endVertex, weight);
+            AddDirectedEdge(endVertex, startVertex, weight);
         }
 
         // Removes the first occurence of an edge and returns true
