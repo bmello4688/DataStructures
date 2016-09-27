@@ -52,29 +52,6 @@ namespace DataStructures
             }
         }
 
-        public int GetShortestPathLength(int vertex)
-        {
-            if (levelDicitonary[Graph[vertex]] < 0)
-                return levelDicitonary[Graph[vertex]];
-            else
-            {
-                int pathLength = 0;
-                int currentVertex = vertex;
-
-                while (levelDicitonary[Graph[currentVertex]] > 0)
-                {
-                    Edge nextEdge = Graph[currentVertex].GetEdge(PathPredecessors[Graph[currentVertex]]);
-
-                    pathLength += nextEdge.Weight;
-
-                    currentVertex = nextEdge.EndingVertex.Number;
-                }
-
-                return pathLength;
-            }
-
-        }
-
         protected internal override void IgnoreVertex(TVertex vertex)
         {
             levelDicitonary[vertex] = int.MaxValue;
