@@ -51,9 +51,9 @@ namespace DataStructures
             List<Vertex> adjacentNodes = GetUnsettledNeighbors(vertex);
             foreach (var target in adjacentNodes)
             {
-                if (GetShortestDistance(target) > GetShortestDistance(vertex) + Graph.GetDistance(vertex, target))
+                if (GetShortestDistance(target) > GetShortestDistance(vertex) + Graph.GetEdgeDistance(vertex, target))
                 {
-                    shortestDistanceDictionary[target] = GetShortestDistance(vertex) + Graph.GetDistance(vertex, target);
+                    shortestDistanceDictionary[target] = GetShortestDistance(vertex) + Graph.GetEdgeDistance(vertex, target);
                     PathPredecessors[target] = (TVertex)vertex;
                     unSettledNodes.Add(target);
                 }

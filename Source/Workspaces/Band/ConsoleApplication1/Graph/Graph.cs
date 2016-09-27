@@ -82,20 +82,20 @@ namespace DataStructures
 
             for (int i = 0; i < path.Count - 1; i++)
             {
-                distance += GetDistance(path[i], path[i + 1]);
+                distance += GetEdgeDistance(path[i], path[i + 1]);
             }
 
             return distance;
         }
 
-        public int GetDistance(Vertex startingVertex, Vertex endingVertex)
+        public int GetEdgeDistance(Vertex startingVertex, Vertex endingVertex)
         {
             return startingVertex.GetEdge(endingVertex).Weight;
         }
 
-        public int GetDistance(int startingVertex, int endingVertex)
+        public int GetEdgeDistance(int startingVertex, int endingVertex)
         {
-            return GetDistance(this[startingVertex], this[endingVertex]);
+            return GetEdgeDistance(this[startingVertex], this[endingVertex]);
         }
     }
 }
