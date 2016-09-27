@@ -93,24 +93,31 @@ namespace ConsoleApplication1
 
                 var missingTypes = fishList.Except(fishTypesInPath);
 
+                int maximumPathCostTemp = maximumPathCost;
+ 
                 maximumPathCost = Math.Min(maximumPathCost, path.GetDistance());
 
+                bool foundSecondPath = false;
                 if (missingTypes.Count() > 0)
                 {
                     //find path that contains missing fish
                     foreach (var secondPath in paths.Where(otherPath => otherPath != path))
                     {
-                        List<int> fishTypesInPath2 = GetFishInPath(path);
+                        List<int> fishTypesInPath2 = GetFishInPath(secondPath);
 
                         var missingTypes2 = missingTypes.Except(fishTypesInPath2);
 
                         if (missingTypes2.Count() == 0)
                         {
                             //found path that contains all fish
-                            maximumPathCost = Math.Max(maximumPathCost, path.GetDistance());
+                            maximumPathCost = Math.Max(maximumPathCost, secondPath.GetDistance());
+                            foundSecondPath = true;
                         }
                     }
                 }
+
+                if (!foundSecondPath)
+                    maximumPathCost = maximumPathCost;
             }
 
             return maximumPathCost;
