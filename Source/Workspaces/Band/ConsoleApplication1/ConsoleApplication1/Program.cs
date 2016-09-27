@@ -80,14 +80,12 @@ namespace ConsoleApplication1
             //disregard all paths with no fish
             paths = paths.Where(path => path.Vertices.Any(center => center.HasFish)).ToList();
 
-            int maximumPathCost = 0;
-            GetMinimumCostPath(fishList, paths, ref maximumPathCost);
-
-            return maximumPathCost;
+            return GetMinimumCostPath(fishList, paths);
         }
 
-        private void GetMinimumCostPath(IEnumerable<int> fishList, IEnumerable<Path<ShoppingCenter>> paths, ref int maximumPathCost)
+        private int GetMinimumCostPath(IEnumerable<int> fishList, IEnumerable<Path<ShoppingCenter>> paths)
         {
+            int maximumPathCost = int.MaxValue;
             //find one or two minimum paths that contain all fish
             foreach (var path in paths)
             {
@@ -95,22 +93,32 @@ namespace ConsoleApplication1
 
                 var missingTypes = fishList.Except(fishTypesInPath);
 
-                if (missingTypes.Count() == 0)
-                {
-                    //found path that contains all fish
-                    maximumPathCost = Math.Min(maximumPathCost, path.GetDistance());
-                }
-                else
+                maximumPathCost = Math.Min(maximumPathCost, path.GetDistance());
+
+                if (missingTypes.Count() > 0)
                 {
                     //find path that contains missing fish
-                    GetMinimumCostPath(missingTypes, paths.Where(otherPath => otherPath != path), ref maximumPathCost);
+                    foreach (var secondPath in paths.Where(otherPath => otherPath != path))
+                    {
+                        List<int> fishTypesInPath2 = GetFishInPath(path);
+
+                        var missingTypes2 = missingTypes.Except(fishTypesInPath2);
+
+                        if (missingTypes2.Count() == 0)
+                        {
+                            //found path that contains all fish
+                            maximumPathCost = Math.Max(maximumPathCost, path.GetDistance());
+                        }
+                    }
                 }
             }
+
+            return maximumPathCost;
         }
 
         private List<int> GetFishInPath(Path<ShoppingCenter> path)
         {
-             return path.Vertices.SelectMany(center => center.FishTypes).Distinct().ToList();
+            return path.Vertices.SelectMany(center => center.FishTypes).Distinct().ToList();
         }
 
         internal void SetKindsOfFish(int k)
@@ -125,7 +133,8 @@ namespace ConsoleApplication1
 
         public bool HasFish { get { return FishTypes.Count > 0; } }
 
-        public ShoppingCenter(int number) : base(number)
+        public ShoppingCenter(int number)
+            : base(number)
         {
             FishTypes = new List<int>();
         }
