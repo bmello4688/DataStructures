@@ -89,5 +89,10 @@ namespace DataStructures
         {
             return GetEdgeDistance(this[startingVertex], this[endingVertex]);
         }
+
+        internal IEnumerable<Edge> GetEdges()
+        {
+            return GetVertices().SelectMany(vertex => vertex.Edges).Distinct();
+        }
     }
 }

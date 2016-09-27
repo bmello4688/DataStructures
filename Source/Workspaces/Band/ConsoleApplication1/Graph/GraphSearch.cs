@@ -49,16 +49,6 @@ namespace DataStructures
             return GetShortestPath(Graph[0], targetVertex);
         }
 
-        public void IgnorePath(Path<TVertex> path)
-        {
-            foreach (var vertex in path.GetMidPath())
-            {
-                IgnoreVertex(vertex);
-            } 
-        }
-
-        protected internal abstract void IgnoreVertex(TVertex vertex);
-
         public Path<TVertex> GetShortestPath(TVertex startVertex, TVertex targetVertex)
         {
             List<TVertex> path = new List<TVertex>();

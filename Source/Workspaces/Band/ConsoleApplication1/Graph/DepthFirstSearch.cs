@@ -43,11 +43,6 @@ namespace DataStructures
             }
         }
 
-        protected internal override void IgnoreVertex(TVertex vertex)
-        {
-            visitedDictionary[vertex] = true;
-        }
-
         protected internal override void OnClear()
         {
             foreach (var vertex in Graph.GetVertices())

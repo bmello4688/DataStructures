@@ -71,47 +71,15 @@ namespace ConsoleApplication1
                 fishList.Add(i);
             }
 
-            DijkstraSearch<ShoppingCenter> search = new DijkstraSearch<ShoppingCenter>(this);
+            FindAllPathsSearch<ShoppingCenter> findPaths = new FindAllPathsSearch<ShoppingCenter>(this);
 
-            search.ExecuteSearch(1);
+            findPaths.ExecuteSearch(1);
 
-            int targetNode = GetVertices().Count() - 1;
+            List<Path<ShoppingCenter>> paths = findPaths.GetAllPaths();
 
-            List<ShoppingCenter> shortestPath = search.GetShortestPath(1, targetNode);
+            //maximumPathCost = Math.Max(maximumPathCost, GetDistance(newShortestPath));
 
-            int maximumPathCost = GetDistance(shortestPath);
-
-            List<int> fishBought = shortestPath.SelectMany(center => center.FishTypes).Distinct().ToList();
-
-            foreach (var fish in fishBought)
-            {
-                fishList.Remove(fish);
-            }
-
-            while(search.GetShortestPath(1,targetNode) != null && fishList.Count > 0)
-            {
-                search.Clear();
-                search.IgnorePath(shortestPath);
-                search.ExecuteSearch(1);
-
-                var newShortestPath = search.GetShortestPath(1, targetNode);
-
-                if (newShortestPath == null)
-                    continue;
-
-                //check if path 
-                List<int> potentialFishBought = newShortestPath.SelectMany(shoppingCenter => shoppingCenter.FishTypes).Distinct().ToList();
-
-                bool boughtAllFish = potentialFishBought.Intersect(fishList).Count() == fishList.Count;
-
-                if (boughtAllFish)
-                    maximumPathCost = Math.Max(maximumPathCost, GetDistance(newShortestPath));
-
-                shortestPath.AddRange(newShortestPath);
-                shortestPath = shortestPath.Distinct().ToList();
-            }
-
-            return maximumPathCost;
+            return paths.Count;
         }
 
         internal void SetKindsOfFish(int k)

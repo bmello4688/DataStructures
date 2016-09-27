@@ -28,11 +28,6 @@ namespace DataStructures
             }
         }
 
-        protected internal override void IgnoreVertex(TVertex vertex)
-        {
-            settledNodes.Add(vertex);
-        }
-
         public  override void ExecuteSearch(TVertex startingVertex)
         {
             shortestDistanceDictionary[startingVertex] = 0;

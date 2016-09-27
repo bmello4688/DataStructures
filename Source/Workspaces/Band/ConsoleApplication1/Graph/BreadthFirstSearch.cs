@@ -51,10 +51,5 @@ namespace DataStructures
                 }
             }
         }
-
-        protected internal override void IgnoreVertex(TVertex vertex)
-        {
-            levelDicitonary[vertex] = int.MaxValue;
-        }
     }
 }
