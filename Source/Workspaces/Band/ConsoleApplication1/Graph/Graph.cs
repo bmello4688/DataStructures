@@ -76,21 +76,9 @@ namespace DataStructures
             return verticesDictionary.Values;
         }
 
-        public int GetDistance(List<T> path)
-        {
-            int distance = 0;
-
-            for (int i = 0; i < path.Count - 1; i++)
-            {
-                distance += GetEdgeDistance(path[i], path[i + 1]);
-            }
-
-            return distance;
-        }
-
         public int GetEdgeDistance(Vertex startingVertex, Vertex endingVertex)
         {
-            return startingVertex.GetEdge(endingVertex).Weight;
+            return Path<T>.GetEdgeDistance(startingVertex, endingVertex);
         }
 
         public int GetEdgeDistance(int startingVertex, int endingVertex)

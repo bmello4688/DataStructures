@@ -39,12 +39,12 @@ namespace DataStructures
 
         protected internal abstract void OnClear();
 
-        public List<TVertex> GetShortestPath(int startVertex, int targetVertex)
+        public Path<TVertex> GetShortestPath(int startVertex, int targetVertex)
         {
             return GetShortestPath(Graph[startVertex], Graph[targetVertex]);
         }
 
-        public List<TVertex> GetShortestPath(TVertex targetVertex)
+        public Path<TVertex> GetShortestPath(TVertex targetVertex)
         {
             return GetShortestPath(Graph[0], targetVertex);
         }
@@ -61,7 +61,7 @@ namespace DataStructures
 
         protected internal abstract void IgnoreVertex(TVertex vertex);
 
-        public List<TVertex> GetShortestPath(TVertex startVertex, TVertex targetVertex)
+        public Path<TVertex> GetShortestPath(TVertex startVertex, TVertex targetVertex)
         {
             List<TVertex> path = new List<TVertex>();
             TVertex step = targetVertex;
@@ -83,7 +83,7 @@ namespace DataStructures
             // Reverse because current list is from end to start
             path.Reverse();
 
-            return path;
+            return new Path<TVertex>(path);
         }
 
         public int GetShortestPathCost(int target)
@@ -93,12 +93,9 @@ namespace DataStructures
 
         public int GetShortestPathCost(TVertex target)
         {
-            List<TVertex> shortestPath = GetShortestPath(target);
+            Path<TVertex> shortestPath = GetShortestPath(target);
 
-            int cost = 0;
-            shortestPath.ForEach(vertex => cost += vertex.Weight);
-
-            return cost;
+            return shortestPath.GetDistance();
         }
     }
 }
