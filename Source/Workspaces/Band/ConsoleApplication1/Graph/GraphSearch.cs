@@ -44,11 +44,6 @@ namespace DataStructures
             return GetShortestPath(Graph[startVertex], Graph[targetVertex]);
         }
 
-        public Path<TVertex> GetShortestPath(TVertex targetVertex)
-        {
-            return GetShortestPath(Graph[0], targetVertex);
-        }
-
         public Path<TVertex> GetShortestPath(TVertex startVertex, TVertex targetVertex)
         {
             List<TVertex> path = new List<TVertex>();
@@ -74,14 +69,14 @@ namespace DataStructures
             return new Path<TVertex>(path);
         }
 
-        public int GetShortestPathCost(int target)
+        public int GetShortestPathCost(int start, int target)
         {
-            return GetShortestPathCost(Graph[target]);
+            return GetShortestPathCost(Graph[start], Graph[target]);
         }
 
-        public int GetShortestPathCost(TVertex target)
+        public int GetShortestPathCost(TVertex source, TVertex target)
         {
-            Path<TVertex> shortestPath = GetShortestPath(target);
+            Path<TVertex> shortestPath = GetShortestPath(source, target);
 
             return shortestPath.GetDistance();
         }

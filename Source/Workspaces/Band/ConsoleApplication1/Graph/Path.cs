@@ -12,6 +12,8 @@ namespace DataStructures
     {
         private List<TVertex> path;
 
+        public IEnumerable<TVertex> Vertices { get { return path; } }
+
         public Path(List<TVertex> path)
         {
             this.path = path;

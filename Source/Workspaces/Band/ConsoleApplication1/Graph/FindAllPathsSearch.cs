@@ -26,7 +26,8 @@ namespace DataStructures
                 TVertex vertex = vertexStack.Peek();
 
                 bool foundUnvisitedEdge = false;
-                foreach (var edge in vertex.Edges)
+                //ignore backward paths
+                foreach (var edge in vertex.Edges.Where(edge => edge.EndingVertex.Number > edge.StartingVertex.Number))
                 {
                     if (!visitedDictionary[edge])
                     {
@@ -43,7 +44,7 @@ namespace DataStructures
                 else if(vertexStack.Peek() == Graph[Graph.LastVertexNumber])
                 {
                     //found path
-                    paths.Add(GetShortestPath(vertexStack.Peek()));
+                    paths.Add(GetShortestPath(startingVertex, vertexStack.Peek()));
                     vertexStack.Pop();
                 }
             }

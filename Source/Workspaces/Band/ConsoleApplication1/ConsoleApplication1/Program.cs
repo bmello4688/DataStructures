@@ -77,9 +77,40 @@ namespace ConsoleApplication1
 
             List<Path<ShoppingCenter>> paths = findPaths.GetAllPaths();
 
-            //maximumPathCost = Math.Max(maximumPathCost, GetDistance(newShortestPath));
+            //disregard all paths with no fish
+            paths = paths.Where(path => path.Vertices.Any(center => center.HasFish)).ToList();
 
-            return paths.Count;
+            int maximumPathCost = 0;
+            GetMinimumCostPath(fishList, paths, ref maximumPathCost);
+
+            return maximumPathCost;
+        }
+
+        private void GetMinimumCostPath(IEnumerable<int> fishList, IEnumerable<Path<ShoppingCenter>> paths, ref int maximumPathCost)
+        {
+            //find one or two minimum paths that contain all fish
+            foreach (var path in paths)
+            {
+                List<int> fishTypesInPath = GetFishInPath(path);
+
+                var missingTypes = fishList.Except(fishTypesInPath);
+
+                if (missingTypes.Count() == 0)
+                {
+                    //found path that contains all fish
+                    maximumPathCost = Math.Min(maximumPathCost, path.GetDistance());
+                }
+                else
+                {
+                    //find path that contains missing fish
+                    GetMinimumCostPath(missingTypes, paths.Where(otherPath => otherPath != path), ref maximumPathCost);
+                }
+            }
+        }
+
+        private List<int> GetFishInPath(Path<ShoppingCenter> path)
+        {
+             return path.Vertices.SelectMany(center => center.FishTypes).Distinct().ToList();
         }
 
         internal void SetKindsOfFish(int k)
@@ -91,6 +122,8 @@ namespace ConsoleApplication1
     class ShoppingCenter : Vertex
     {
         public List<int> FishTypes { get; private set; }
+
+        public bool HasFish { get { return FishTypes.Count > 0; } }
 
         public ShoppingCenter(int number) : base(number)
         {
