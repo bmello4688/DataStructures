@@ -49,14 +49,12 @@ namespace DataStructures
             return GetShortestPath(Graph[0], targetVertex);
         }
 
-        public void IgnorePath(List<TVertex> vertices)
+        public void IgnorePath(Path<TVertex> path)
         {
-            int lastNodeNumber = Graph.GetVertices().Count() - 1;
-            foreach (var vertex in vertices)
+            foreach (var vertex in path.GetMidPath())
             {
-                if (vertex.Number != lastNodeNumber)
-                    IgnoreVertex(vertex);
-            }
+                IgnoreVertex(vertex);
+            } 
         }
 
         protected internal abstract void IgnoreVertex(TVertex vertex);

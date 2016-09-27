@@ -42,6 +42,7 @@
     <Compile Include="DepthFirstSearch.cs" />
     <Compile Include="DijkstraSearch.cs" />
     <Compile Include="Edge.cs" />
+    <Compile Include="FindAllPathsSearch.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="GraphSearch.cs" />
     <Compile Include="Path.cs" />

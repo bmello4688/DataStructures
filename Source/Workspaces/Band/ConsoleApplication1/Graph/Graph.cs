@@ -17,6 +17,8 @@ namespace DataStructures
             }
         }
 
+        public int LastVertexNumber { get; private set; }
+
         // Constructor - creates an empty Adjacency List
         public Graph(int vertices)
         {
@@ -26,6 +28,8 @@ namespace DataStructures
             {
                 verticesDictionary.Add(i, CreateVertex(i));
             }
+
+            LastVertexNumber = vertices - 1;
         }
 
         protected T CreateVertex(int i)
