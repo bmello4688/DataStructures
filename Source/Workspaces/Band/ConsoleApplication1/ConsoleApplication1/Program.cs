@@ -97,7 +97,7 @@ namespace ConsoleApplication1
  
                 maximumPathCost = Math.Min(maximumPathCost, path.GetDistance());
 
-                bool foundSecondPath = false;
+                int secondPathCost = int.MaxValue;
                 if (missingTypes.Count() > 0)
                 {
                     //find path that contains missing fish
@@ -110,14 +110,15 @@ namespace ConsoleApplication1
                         if (missingTypes2.Count() == 0)
                         {
                             //found path that contains all fish
-                            maximumPathCost = Math.Max(maximumPathCost, secondPath.GetDistance());
-                            foundSecondPath = true;
+                            secondPathCost = Math.Min(secondPathCost, secondPath.GetDistance());
                         }
                     }
                 }
 
-                if (!foundSecondPath)
-                    maximumPathCost = maximumPathCost;
+                if (secondPathCost == int.MaxValue)
+                    maximumPathCost = maximumPathCostTemp;
+                else
+                    maximumPathCost = Math.Max(maximumPathCost, secondPathCost);
             }
 
             return maximumPathCost;
