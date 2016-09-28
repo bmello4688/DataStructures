@@ -97,9 +97,10 @@ namespace ConsoleApplication1
  
                 maximumPathCost = Math.Min(maximumPathCost, path.GetDistance());
 
-                int secondPathCost = int.MaxValue;
+                int secondPathCost = 0;
                 if (missingTypes.Count() > 0)
                 {
+                    secondPathCost = int.MaxValue;
                     //find path that contains missing fish
                     foreach (var secondPath in paths.Where(otherPath => otherPath != path))
                     {
