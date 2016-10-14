@@ -48,11 +48,16 @@ namespace DataStructures
             {
                 if (GetShortestDistance(target) > GetShortestDistance(vertex) + Graph.GetEdgeDistance(vertex, target))
                 {
-                    shortestDistanceDictionary[target] = GetShortestDistance(vertex) + Graph.GetEdgeDistance(vertex, target);
+                    FoundNewPath((TVertex)vertex, (TVertex)target);
                     PathPredecessors[target] = (TVertex)vertex;
                     unSettledNodes.Add(target);
                 }
             }
+        }
+
+        protected internal virtual void FoundNewPath(TVertex vertex, TVertex target)
+        {
+            shortestDistanceDictionary[target] = GetShortestDistance(vertex) + Graph.GetEdgeDistance(vertex, target);
         }
 
         private List<Vertex> GetUnsettledNeighbors(Vertex startingVertex)
@@ -82,7 +87,7 @@ namespace DataStructures
             return settledNodes.Contains(vertex);
         }
 
-        private int GetShortestDistance(Vertex destination)
+        public int GetShortestDistance(Vertex destination)
         {
             return shortestDistanceDictionary[destination];
         }
