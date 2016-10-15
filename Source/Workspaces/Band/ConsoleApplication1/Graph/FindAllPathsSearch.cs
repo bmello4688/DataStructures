@@ -44,8 +44,8 @@ namespace DataStructures
                 return;
             else
             {
-                if(setPaths.Count > 0 && setPaths.Last() != newPath)
-                    setPaths.Remove(newPath);
+                if (setPaths.Count > 0)
+                    setPaths.RemoveWhere(path => path.Equals(newPath));
 
                 paths.Add(newPath);
                 setPaths.Add(newPath);
