@@ -7,9 +7,9 @@ namespace DataStructures
 {
     public class DijkstraSearch<TVertex> : GraphSearch<TVertex> where TVertex : Vertex
     {
-        private HashSet<Vertex> settledNodes = new HashSet<Vertex>();
-        private HashSet<Vertex> unSettledNodes = new HashSet<Vertex>();
-        private Dictionary<Vertex, int> shortestDistanceDictionary = new Dictionary<Vertex, int>();
+        private HashSet<TVertex> settledNodes = new HashSet<TVertex>();
+        private HashSet<TVertex> unSettledNodes = new HashSet<TVertex>();
+        private Dictionary<TVertex, int> shortestDistanceDictionary = new Dictionary<TVertex, int>();
 
         public DijkstraSearch(Graph<TVertex> graph)
             :base(graph)
@@ -34,22 +34,22 @@ namespace DataStructures
             unSettledNodes.Add(startingVertex);
             while (unSettledNodes.Count > 0)
             {
-                Vertex node = GetMinimum(unSettledNodes);
+                TVertex node = GetMinimum(unSettledNodes);
                 settledNodes.Add(node);
                 unSettledNodes.Remove(node);
                 FindMinimalDistances(node);
             }
         }
 
-        private void FindMinimalDistances(Vertex vertex)
+        private void FindMinimalDistances(TVertex vertex)
         {
-            List<Vertex> adjacentNodes = GetUnsettledNeighbors(vertex);
+            List<TVertex> adjacentNodes = GetUnsettledNeighbors(vertex);
             foreach (var target in adjacentNodes)
             {
-                if (GetShortestDistance(target) > GetShortestDistance(vertex) + Graph.GetEdgeDistance(vertex, target))
+                if (GetDistance(target) > GetDistance(vertex) + Graph.GetEdgeDistance(vertex, target))
                 {
-                    FoundNewPath((TVertex)vertex, (TVertex)target);
-                    PathPredecessors[target] = (TVertex)vertex;
+                    FoundNewPath(vertex, target);
+                    PathPredecessors[target] = vertex;
                     unSettledNodes.Add(target);
                 }
             }
@@ -57,24 +57,24 @@ namespace DataStructures
 
         protected internal virtual void FoundNewPath(TVertex vertex, TVertex target)
         {
-            shortestDistanceDictionary[target] = GetShortestDistance(vertex) + Graph.GetEdgeDistance(vertex, target);
+            shortestDistanceDictionary[target] = GetDistance(vertex) + Graph.GetEdgeDistance(vertex, target);
         }
 
-        private List<Vertex> GetUnsettledNeighbors(Vertex startingVertex)
+        private List<TVertex> GetUnsettledNeighbors(TVertex startingVertex)
         {
-            return startingVertex.Edges.Where(edge => !IsSettled(edge.EndingVertex)).Select(edge => edge.EndingVertex).ToList();
+            return startingVertex.Edges.Where(edge => !IsSettled(edge.EndingVertex)).Select(edge => edge.EndingVertex).Cast<TVertex>().ToList();
         }
 
-        private Vertex GetMinimum(HashSet<Vertex> vertices)
+        private TVertex GetMinimum(HashSet<TVertex> vertices)
         {
-            Vertex minimum = null;
+            TVertex minimum = null;
             foreach (var vertex in vertices)
             {
                 if (minimum == null)
                     minimum = vertex;
                 else
                 {
-                    if (GetShortestDistance(vertex) < GetShortestDistance(minimum))
+                    if (GetDistance(vertex) < GetDistance(minimum))
                         minimum = vertex;
                 }
             }
@@ -84,10 +84,10 @@ namespace DataStructures
 
         private bool IsSettled(Vertex vertex)
         {
-            return settledNodes.Contains(vertex);
+            return settledNodes.Contains((TVertex)vertex);
         }
 
-        public int GetShortestDistance(Vertex destination)
+        public virtual int GetDistance(TVertex destination)
         {
             return shortestDistanceDictionary[destination];
         }
