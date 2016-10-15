@@ -17,6 +17,10 @@ namespace DataStructures
             Clear();
         }
 
+        protected List<TVertex> GetNeighbors(TVertex startingVertex)
+        {
+            return startingVertex.Edges.Select(edge => edge.EndingVertex).Cast<TVertex>().ToList();
+        }
 
         public void ExecuteSearch(int startingVertexNumber)
         {

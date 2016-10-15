@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DataStructures
 {
-    public class Vertex
+    public class Vertex : IComparable
     {
         private Dictionary<int, Edge> edges = new Dictionary<int, Edge>();
 
@@ -44,6 +44,17 @@ namespace DataStructures
         internal Edge GetEdge(Vertex vertex)
         {
             return edges[vertex.Number];
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj is Vertex)
+            {
+                var otherVertex = (Vertex)obj;
+                return Number.CompareTo(otherVertex.Number);
+            }
+            else
+                return -1;
         }
     }
 }

@@ -14,6 +14,11 @@ namespace DataStructures
 
         public IEnumerable<TVertex> Vertices { get { return path; } }
 
+        public Path(TVertex startingVertexInPath)
+            : this(new List<TVertex>(){startingVertexInPath})
+        {
+        }
+
         public Path(List<TVertex> path)
         {
             this.path = path;
@@ -44,6 +49,31 @@ namespace DataStructures
                 return path.Skip(1).Take(middleVertexCount);
             else
                 return null;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Path<TVertex>)
+            {
+                var otherPath = (Path<TVertex>)obj;
+                return Vertices.OrderBy(x => x).SequenceEqual(otherPath.Vertices.OrderBy(x => x));
+            }
+            else
+                return false;
+        }
+
+        internal static Path<TVertex> Extend(Path<TVertex> path, TVertex vertex)
+        {
+            var newPath = path.Vertices.ToList();
+
+            if (!newPath.Contains(vertex))
+            {   //makes unique
+                newPath.Add(vertex);
+                return new Path<TVertex>(newPath);
+            }
+            else
+                return path;
+            
         }
     }
 }
